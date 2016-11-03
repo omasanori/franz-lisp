@@ -113,7 +113,7 @@ copyobjects: ${AllObj}
 	(tar cf - ${AllObj} | (cd ${CopyTo} ; tar xf -))
 
 scriptcatall: ${AllSrc}
-	@../../scriptcat . liszt/vax ${AllSrc}
+	@../../scriptcat . liszt/tahoe ${AllSrc}
 
 cleanobj:	
 	rm -f \#* *.[xo] map

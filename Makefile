@@ -1,4 +1,4 @@
-# $Header: Makefile,v 1.30 87/12/16 22:59:24 sklower Exp $
+# $Header: /usr/src/local/franz/RCS/Makefile,v 1.30 87/12/16 22:59:24 sklower Exp $
 # $Locker:  $
 #  Makefile for total Franz Lisp system.
 #
@@ -50,19 +50,19 @@ Mach = tahoe
 #Mach = 68k
 #endif
 
-RootDir = /usr/src/ucb/lisp
+RootDir = /usr/src/local/franz
 #ifdef ucbstd
-LibDir = ${DESTDIR}/usr/lib/lisp
-ObjDir = ${DESTDIR}/usr/ucb
+#LibDir = ${DESTDIR}/usr/lib/lisp
+#ObjDir = ${DESTDIR}/usr/ucb
 #else
-#LibDir = ${DESTDIR}${RootDir}/lisplib
-#ObjDir = ${DESTDIR}${RootDir}/bin
+LibDir = ${DESTDIR}${RootDir}/lisplib
+ObjDir = ${DESTDIR}${RootDir}/bin
 #endif
 LispDist = /usr/src/ucb/lispdist
 CopyTo = /dev/null
 Lisp = ${ObjDir}/lisp
 Liszt = ${ObjDir}/liszt
-Version = 38.93
+Version = 38.93b
 
 # definitions that you shouldn't change
 FranzD = franz/${Mach}
@@ -105,6 +105,9 @@ old-all:
 copylibrary: 
 #ifdef ucbstd
 	(cd lisplib ; make CopyTo=${LibDir} copysource)
+	-mkdir ${LibDir}/manual
+	(cd doc; make LibDir=${LibDir} FromDir=../lisplib \
+				CopyTo=${LibDir}/manual copymanual)
 #endif
 
 fast:
@@ -122,7 +125,7 @@ fast:
 	(cd ${LisztD}; make Lisp=${CcodeDir}/nlisp \
 			    Liszt=./nliszt cleanobj nliszt)
 	(cd liszt ; make Liszt=${Mach}/nliszt lxref)
-	(cd doc; make LibDir=${LibDir} install)
+	(cd doc; make LibDir=${LibDir} rall install)
 	date
 
 slow:
@@ -147,7 +150,7 @@ slow:
 				       LibDir=${LibDir} donlisp)
 	(cd ${LisztD}; make Lisp=${CcodeDir}/nlisp Liszt=./nliszt nliszt)
 	(cd liszt ; make Liszt=${Mach}/nliszt lxref)
-	(cd doc; make LibDir=${LibDir} install)
+	(cd doc; make LibDir=${LibDir} rall install)
 	date
 
 install:
@@ -229,6 +232,7 @@ genlispscript:
 	@echo mkdir franz/68k
 	@echo mkdir liszt
 	@echo mkdir liszt/tahoe
+	@echo mkdir liszt/vax
 	@echo mkdir liszt/68k
 	@echo mkdir doc
 	@echo mkdir utils
@@ -245,6 +249,7 @@ genlispscript:
 	@(cd liszt ; make scriptcatall)
 	@(cd liszt/tahoe ; make scriptcatall)
 	@(cd liszt/68k ; make scriptcatall)
+	@(cd liszt/vax ; make scriptcatall)
 	@(cd doc ; make LibDir=${LibDir} scriptcatall)
 	@(cd utils ; make scriptcatall )
 	@(X=`pwd` ; cd pearl ; make CdTo=$$X scriptcatall)
